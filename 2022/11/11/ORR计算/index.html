@@ -1,0 +1,737 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/web.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Jason">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="ORR课题计算 通过MS建立石墨烯模型的方法 电催化相关知识总结 VASP相关 VASP关键词理解 疑问点   非常重要的文献 J. Phys. Chem. B 2004, 108, 46, 17886–17892 20200610经典-破千引用的电催化计算开山之作 - 知乎 (zhihu.com)   校正分子和吸附分子自由能 博客链接 https:&#x2F;&#x2F;janaf.nist.gov&#x2F; —热力学信">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ORR计算相关">
+<meta property="og:url" content="http://example.com/2022/11/11/ORR%E8%AE%A1%E7%AE%97/index.html">
+<meta property="og:site_name" content="PhoenixJason">
+<meta property="og:description" content="ORR课题计算 通过MS建立石墨烯模型的方法 电催化相关知识总结 VASP相关 VASP关键词理解 疑问点   非常重要的文献 J. Phys. Chem. B 2004, 108, 46, 17886–17892 20200610经典-破千引用的电催化计算开山之作 - 知乎 (zhihu.com)   校正分子和吸附分子自由能 博客链接 https:&#x2F;&#x2F;janaf.nist.gov&#x2F; —热力学信">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/post2.jpg">
+<meta property="article:published_time" content="2022-11-11T05:33:43.000Z">
+<meta property="article:modified_time" content="2022-11-11T08:45:10.374Z">
+<meta property="article:author" content="Jason">
+<meta property="article:tag" content="Study">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/post2.jpg">
+  
+  
+  
+  <title>ORR计算相关 - PhoenixJason</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.3","typing":{"enable":false,"typeSpeed":20,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Phoenix Jason</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">ORR计算相关</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-11-11 13:33" pubdate>
+          2022年11月11日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          27 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">ORR计算相关</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1>ORR课题计算</h1>
+<p><a target="_blank" rel="noopener" href="http://muchong.com/t-3191417-1" title="通过MS建立石墨烯模型的方法">通过MS建立石墨烯模型的方法</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.wolai.com/gV5pdkWFrX1LAbcGZAQxPo" title="电催化相关知识总结">电催化相关知识总结</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.wolai.com/jrXb75PLGY2AHhsjvgrrf3" title="VASP相关">VASP相关</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.wolai.com/c5FVsvrKbSbJnnmmRdMZSK" title="VASP关键词理解">VASP关键词理解</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.wolai.com/vANdFUSdLn6riLTxJWAZYk" title="疑问点">疑问点</a></p>
+<ul>
+<li>
+<p>非常重要的文献</p>
+<p><a target="_blank" rel="noopener" href="https://doi.org/10.1021/jp047349j" title="J. Phys. Chem. B"><em>J. Phys. Chem. B</em></a><a target="_blank" rel="noopener" href="https://doi.org/10.1021/jp047349j" title=" 2004, 108, 46, 17886–17892"> 2004, 108, 46, 17886–17892</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/151403053" title="20200610经典-破千引用的电催化计算开山之作 - 知乎 (zhihu.com)">20200610经典-破千引用的电催化计算开山之作 - 知乎 (zhihu.com)</a></p>
+</li>
+<li>
+<p>校正分子和吸附分子自由能</p>
+<p><a target="_blank" rel="noopener" href="http://blog.wangruixing.cn/2019/04/21/freenergy/" title="博客链接">博客链接</a></p>
+<p><a target="_blank" rel="noopener" href="https://janaf.nist.gov/" title="https://janaf.nist.gov/">https://janaf.nist.gov/</a> —热力学信息的网站</p>
+</li>
+</ul>
+<p>2电子的基元反应：</p>
+<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>O</mi><mn>2</mn></msub><msup><mo>+</mo><mo>∗</mo></msup><mo>+</mo><mi>H</mi><mn>2</mn><mi>O</mi><mo stretchy="false">(</mo><mi>l</mi><mo stretchy="false">)</mo><mo>+</mo><msup><mi>e</mi><mo>−</mo></msup><mo>=</mo><msup><mo>=</mo><mo>∗</mo></msup><mi>O</mi><mi>O</mi><mi>H</mi><mo>+</mo><mi>O</mi><msup><mi>H</mi><mo>−</mo></msup><mo stretchy="false">(</mo><mi>a</mi><mi>q</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O_2 + ^* + H2O(l) + e^- == ^*OOH + OH^-(aq)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8887em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin"><span class="mbin">+</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7387em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">+</span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mord">2</span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8213em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8213em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">−</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span></span><span class="base"><span class="strut" style="height:0.7387em;"></span><span class="mrel"><span class="mrel">=</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7387em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">OO</span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.0713em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8213em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">−</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="mclose">)</span></span></span></span></span></p>
+<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msup><mrow></mrow><mo>∗</mo></msup><mi>O</mi><mi>O</mi><mi>H</mi><mo>+</mo><mi>O</mi><msup><mi>H</mi><mo>−</mo></msup><mo stretchy="false">(</mo><mi>a</mi><mi>q</mi><mo stretchy="false">)</mo><mo>+</mo><msup><mi>e</mi><mo>−</mo></msup><mo>=</mo><mo>=</mo><mi>O</mi><mi>O</mi><msup><mi>H</mi><mo>−</mo></msup><mo stretchy="false">(</mo><mi>a</mi><mi>q</mi><mo stretchy="false">)</mo><msup><mo>+</mo><mo>∗</mo></msup><mo>+</mo><mi>O</mi><mi>H</mi><mo>−</mo><mo stretchy="false">(</mo><mi>a</mi><mi>q</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">^*OOH +OH^-(aq) +e^- == OOH^-(aq) + ^* +OH-(aq)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.822em;vertical-align:-0.0833em;"></span><span class="mord"><span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7387em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.02778em;">OO</span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.0713em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8213em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">−</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8213em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8213em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">−</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">==</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0713em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">OO</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8213em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">−</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin"><span class="mbin">+</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7387em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord">+</span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="mclose">)</span></span></span></span></span></p>
+<h3 id="单位转化：">单位转化：</h3>
+<p><a target="_blank" rel="noopener" href="http://muchong.com/html/201706/4307830.html" title="帖子1">帖子1</a></p>
+<p><a target="_blank" rel="noopener" href="http://bbs.keinsci.com/thread-19311-1-1.html" title="帖子2">帖子2</a></p>
+<p><img src="/img/ORR/1.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="标准自由能计算（热力学数值计算）：">标准自由能计算（热力学数值计算）：</h3>
+<p><a target="_blank" rel="noopener" href="http://muchong.com/html/201808/12548416.html" title="ORR反应中氢氧根能量怎么算？">ORR反应中氢氧根能量怎么算？</a></p>
+<p>如果你按Noskov的那一套，不需要直接计算-OH根的。通过考虑O, OH, OOH在零电压情况和中性条件下的吸附，以H2, H2O分子的能量作为参考，可计算出O, OH和OOH的吸附能，然后得到每步反应的自由能的变化。 酸碱度的影响，在没有考虑溶剂化效应（显式的，比如直接加入水分子；隐式的，比如PCM之类的溶剂化模型）下，直接通过pH的关系式加入。</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/397853924" title="链接">链接</a></p>
+<p><img src="/img/ORR/2.png" srcset="/img/loading.gif" lazyload alt="Table A: DFT energies, Zero point energy, enthalpic temperature correction and entropy correction at 25 C. The entropies of H2(g), CO(g) and CO2(g) are calculated at 1 atm, while the entropy of H2O(g=l) is calculated at 0.035 atm, which corresponds to the vapor pressure of liquid water. Units are in eV."></p>
+<h4 id="方法的不同分为超软赝势-USPP-和投影缀加波的赝势-PAW-根据交换关联函数的不同有-LDA-和-GGA-又可以再分为-PW91-和-PBE">方法的不同分为超软赝势(USPP)和投影缀加波的赝势(PAW) 根据交换关联函数的不同有 LDA 和 GGA(又可以再分为 PW91 和 PBE)</h4>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/682f1f64e53c" title="qsub提交任务的相关知识">qsub提交任务的相关知识</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/110081982" title="理解氧还原反应的催化活性趋势">理解氧还原反应的催化活性趋势</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.guanjihuan.com/archives/20869" title="贝里曲率的计算">贝里曲率的计算</a></p>
+<p>曲率计算公式：</p>
+<p>将CONTCAR文件的分数坐标转化为笛卡尔坐标，再将单位转化为nm，以a轴坐标为x轴，c轴坐标为y轴作图，通过6阶多项式拟合获得其位置的拟合曲线，再根据曲率计算公式：</p>
+<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>K</mi><mi>n</mi></msub><mo>=</mo><mfrac><mrow><mi mathvariant="normal">∣</mi><msup><mi>y</mi><mrow><mo mathvariant="normal">′</mo><mo mathvariant="normal">′</mo></mrow></msup><mi mathvariant="normal">∣</mi></mrow><mrow><mo stretchy="false">(</mo><mn>1</mn><mo>+</mo><msup><mi>y</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><msup><mo stretchy="false">)</mo><mfrac><mn>3</mn><mn>2</mn></mfrac></msup></mrow></mfrac></mrow><annotation encoding="application/x-tex">K_n=\frac{|y&#x27;&#x27;|}{(1+y&#x27;)^{\frac32}}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.5085em;vertical-align:-1.0796em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.4289em;"><span style="top:-2.1704em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6779em;"><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9396em;"><span style="top:-3.3486em;margin-right:0.05em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mopen nulldelimiter sizing reset-size3 size6"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8443em;"><span style="top:-2.656em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.2255em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line mtight" style="border-bottom-width:0.049em;"></span></span><span style="top:-3.384em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">3</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.344em;"><span></span></span></span></span></span><span class="mclose nulldelimiter sizing reset-size3 size6"></span></span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">∣</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′′</span></span></span></span></span></span></span></span></span><span class="mord">∣</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.0796em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<p>随后将所有点的曲率求平均，获得结构的平均曲率：</p>
+<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mover accent="true"><mi>K</mi><mo>ˉ</mo></mover><mo>=</mo><mfrac><mn>1</mn><mi>N</mi></mfrac><munderover><mo>∑</mo><mrow><mi>n</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><msub><mi>K</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">\bar K = \frac1N\sum^N_{n=1}K_n
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8201em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8201em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span><span style="top:-3.2523em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1944em;"><span class="mord">ˉ</span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:3.0954em;vertical-align:-1.2671em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8283em;"><span style="top:-1.8829em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.05em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">N</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2671em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></p>
+<p><a target="_blank" rel="noopener" href="http://sobereva.com/373" title="谈谈赝势基组的选用 - 思想家公社的门口：量子化学·分子模拟·二次元 (sobereva.com)">谈谈赝势基组的选用 - 思想家公社的门口：量子化学·分子模拟·二次元 (sobereva.com)</a></p>
+<p>赝势的选择，一般来说硬的电势截断能要求更大，还有赝势对不同轨道电子的电芯化的不同也会有差异。</p>
+<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>E</mi><mrow><mi>a</mi><mi>d</mi><mi>s</mi></mrow></msub><mo stretchy="false">(</mo><mo separator="true">⋅</mo><mi>O</mi><mi>O</mi><mi>H</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mi>E</mi><mrow><mi>a</mi><mi>d</mi><mi>s</mi></mrow></msub><mo>−</mo><msub><mi>E</mi><mrow><mi>s</mi><mi>l</mi><mi>a</mi><mi>b</mi></mrow></msub><mo>−</mo><msub><mi>E</mi><mrow><mo separator="true">⋅</mo><mi>O</mi><mi>O</mi><mi>H</mi></mrow></msub></mrow><annotation encoding="application/x-tex">E_{ads}(·OOH) = E_{ads} - E_{slab} - E_{·OOH}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">s</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mpunct">⋅</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">OO</span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">s</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">s</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span><span class="mord mathnormal mtight">ab</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mpunct mtight">⋅</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">OO</span><span class="mord mathnormal mtight" style="margin-right:0.08125em;">H</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></p>
+<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>E</mi><mrow><mi>a</mi><mi>d</mi><mi>s</mi></mrow></msub><mo stretchy="false">(</mo><mo separator="true">⋅</mo><mi>O</mi><mi>O</mi><mi>H</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mi>E</mi><mrow><mi>g</mi><mi>r</mi><msub><mi>a</mi><mrow><mi>a</mi><mi>d</mi><mi>s</mi></mrow></msub></mrow></msub><mo>−</mo><msub><mi>E</mi><mrow><mi>g</mi><mi>r</mi><mi>a</mi></mrow></msub><mo>−</mo><msub><mi>E</mi><mrow><mo separator="true">⋅</mo><mi>O</mi><mi>O</mi><mi>H</mi></mrow></msub></mrow><annotation encoding="application/x-tex">E_{ads}(·OOH) = E_{gra_{ads}} - E_{gra} - E_{·OOH}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">s</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mpunct">⋅</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">OO</span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">g</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span><span class="mord mtight"><span class="mord mathnormal mtight">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3488em;margin-left:0em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">s</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1512em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">g</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span><span class="mord mathnormal mtight">a</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mpunct mtight">⋅</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">OO</span><span class="mord mathnormal mtight" style="margin-right:0.08125em;">H</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></p>
+<h3 id="吉布斯自由能变化的计算公式">吉布斯自由能变化的计算公式</h3>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://doi.org/10.1016/j.apcatb.2019.117930" title="Applied Catalysis B: Environmental, 2019, 257, 117930">Applied Catalysis B: Environmental, 2019, 257, 117930</a></p>
+<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>G</mi><mo>=</mo><mi mathvariant="normal">Δ</mi><mi>E</mi><mo>−</mo><mi>T</mi><mi mathvariant="normal">Δ</mi><mi>S</mi><mo>+</mo><mi mathvariant="normal">Δ</mi><mi>Z</mi><mi>P</mi><mi>E</mi></mrow><annotation encoding="application/x-tex">  \Delta G = \Delta E - T\Delta S + \Delta ZPE
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Δ</span><span class="mord mathnormal">G</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord">Δ</span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord">Δ</span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Δ</span><span class="mord mathnormal" style="margin-right:0.05764em;">ZPE</span></span></span></span></span></p>
+<p><a target="_blank" rel="noopener" href="https://doi.org/10.1021/jp047349j" title="J. Phys. Chem. B 2004, 108, 46, 17886–17892"><em>J. Phys. Chem. B 2004, 108, 46, 17886–17892</em></a></p>
+<p><img src="/img/ORR/3.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>The free energy pathway of ORR on different sites was calculated by using the computational hydrogen electrode (CHE) model <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mrow></mrow><mrow><mo stretchy="false">[</mo><mn>5</mn><mo stretchy="false">]</mo></mrow></msup></mrow><annotation encoding="application/x-tex">^{[5]}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.888em;"></span><span class="mord"><span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.888em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">[</span><span class="mord mtight">5</span><span class="mclose mtight">]</span></span></span></span></span></span></span></span></span></span></span></span>, and this can be converted to the adsorption free energy by adding zero-point energy (ZPE) and entropy (TS) as follows:</p>
+<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>G</mi><mo>=</mo><mi mathvariant="normal">Δ</mi><mi>E</mi><mo>−</mo><mi>T</mi><mi mathvariant="normal">Δ</mi><mi>S</mi><mo>+</mo><mi mathvariant="normal">Δ</mi><mi>Z</mi><mi>P</mi><mi>E</mi></mrow><annotation encoding="application/x-tex">\Delta G = \Delta E - T\Delta S + \Delta ZPE
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Δ</span><span class="mord mathnormal">G</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord">Δ</span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord">Δ</span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Δ</span><span class="mord mathnormal" style="margin-right:0.05764em;">ZPE</span></span></span></span></span></p>
+<p><a target="_blank" rel="noopener" href="http://bbs.keinsci.com/thread-21097-1-1.html" title="一篇讨论该问题的帖子">一篇讨论该问题的帖子</a></p>
+</blockquote>
+<h3 id="写赝势文件的命令">写赝势文件的命令 </h3>
+<p>按POSCAR文件中，每类原子的顺序把各类原子相应的赝势合并到同一个POTCAR文件中。需要注意每类原子的赝势类型一致。生成POTCAR文件的命令为cat /…/PAW_PBE/{A1,A2,A3,…,An}/POTCAR&gt;&gt; POTCAR，其中/…/表示赝势包的路径，PAW_PBE代表赝势种类，{A1,A2,A3,…,An}代表原子种类。</p>
+<h3 id="VASP表面吸附计算中的几个细节问题">VASP表面吸附计算中的几个细节问题</h3>
+<ol>
+<li>
+<p>根据教程，小分子的优化也需要放在晶格中进行优化，那么这个晶格的晶胞参数大小需要和优化晶体表面时的晶胞参数保持一致么？</p>
+<p>没必要，优化分子采用的格子应该要类似于处理真空层那样测试到能量收敛，当然，需要三个方向都进行偶极修正，否则能量是收敛不了的</p>
+</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="http://bbs.keinsci.com/thread-3871-1-1.html" title="参考帖子">参考帖子</a></p>
+<h3 id="晶格参数的优化">晶格参数的优化</h3>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/124134649" title=" VASP计算笔记-晶格常数优化"> VASP计算笔记-晶格常数优化</a></p>
+<p>ISIF=3</p>
+<p>或者取点，不同的晶格常数进行单点计算获得其能量</p>
+<h3 id="vasp计算不收敛的处理办法">vasp计算不收敛的处理办法</h3>
+<p><a target="_blank" rel="noopener" href="http://bbs.keinsci.com/thread-13065-1-1.html" title="参考帖子">参考帖子</a></p>
+<p><strong>几何结构优化不收敛尝试以下方法：</strong><a target="_blank" rel="noopener" href="http://blog.wangruixing.cn/2019/05/01/scf/#ji-he-jie-gou-you-hua-bu-shou-lian-chang-shi-yi-xia-fang-fa" title="#"><strong>#</strong></a></p>
+<p>（1）如果力在接近收敛的区域震荡，很有可能是电子步精度不够高，尝试EDIFF=1E-6或者EDIFF = 1E-7</p>
+<p>（2）如果力在接近收敛的区域震荡尝试IBRION=1</p>
+<p>（3）如果初始结构不好，或者在优化的前几步结构就崩了，IBRION=2，步长<strong>POTIM缩小</strong>到0.2或0.1。（尤其是对双原子分子的优化，要限制步长）。如果在极小点附近出现震荡，POTIM可以缩小到0.05。</p>
+<p>（4）调整初始结构。过渡态优化失败不收敛最大的原因就是初始结构不合理。</p>
+<p>（5）如果体系结构复杂，原子多导致结构收敛慢，力收敛趋势和能量收敛趋势向下，尝试增加收敛步数，NSW=1000。尤其是对于加了vdW校正的，优化收敛会变得非常慢。</p>
+<p>（6）尝试IBRION=3，阻尼md的方法往往对超大体系收敛效果好。</p>
+<p>（7）调整晶体的对称性，或先使用ISYM=0优化，如果优化一开始的初猜结构具有较高对称性，那么优化过程中这个对称性多数情况下会一直保持。如果实际上体系本身势能面极小点的结构并没有那么高的对称性，则很容易造成优化不能收敛，而且即便收敛了也会有虚频。</p>
+<p>（8）改变收敛标准：几何优化的收敛标准一般为EDIFFG= -0.02，</p>
+<p>对于体系较大难以收敛的体系，见到文献里有用EDIFFG= -0.05的。但是不建议使用更大的收敛标准了。</p>
+<p>（9）使用更精确的积分格点精度，PREC=Accurate等。</p>
+<p><a target="_blank" rel="noopener" href="https://cndaqiang.github.io/2018/01/23/vasp-step1/" title="vasp计算流程-结构优化">vasp计算流程-结构优化</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/pro_fan/article/details/84348793" title="Linux系统查看文件的五种方式">Linux系统查看文件的五种方式</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/375225878" title="MS中斜方晶格转换为正交晶格">MS中斜方晶格转换为正交晶格</a></p>
+<h3 id="赝势文件">赝势文件</h3>
+<p>PAW_LDA</p>
+<p>PAW_PBE</p>
+<p>PAW_PW91</p>
+<p>USPP_LDA</p>
+<p>USPP_PW91</p>
+<h3 id="VASP结构优化过程中查看能量和力收敛">VASP结构优化过程中查看能量和力收敛</h3>
+<p><a target="_blank" rel="noopener" href="http://blog.sina.com.cn/s/blog_b364ab230102vxj8.html" title="http://blog.sina.com.cn/s/blog_b364ab230102vxj8.html">http://blog.sina.com.cn/s/blog_b364ab230102vxj8.html</a></p>
+<h3 id="报错-ZBRENT">报错 ZBRENT</h3>
+<p>ZBRENT: fatal error in bracketing</p>
+<p>please rerun with smaller EDIFF, or copy CONTCAR</p>
+<p>to POSCAR and continue</p>
+<p>原因以及解决办法</p>
+<p><strong>该错误一般是由于电荷重叠引起的或对称性不匹配引起的</strong></p>
+<ol>
+<li>
+<p>修改EDIFF，即按照其要求降低EDIFF重新计算</p>
+</li>
+<li>
+<p>改变IBRION方式，如变为IBRION=1的方法</p>
+</li>
+<li>
+<p>增大POTIM的值，如POTIM=0.1</p>
+</li>
+</ol>
+<h3 id="报错Error-EDDDAV-Call-to-ZHEGV-failed-Returncode-94-1-95">报错Error EDDDAV: Call to ZHEGV failed. Returncode = 94 1 95 </h3>
+<p><a target="_blank" rel="noopener" href="http://bbs.keinsci.com/thread-508-1-1.html" title="参考帖子">参考帖子</a></p>
+<p>两种方法解决：<br>
+（1）POSCAR中晶格占位有问题，认真核对一下，这种错误可能性比较大！<br>
+（2）加ALGO=VERY_FAST，使用RMM方法收敛，可能还会报类似的错误，但能继续计算！</p>
+<p><a target="_blank" rel="noopener" href="https://www.wolai.com/tFQcVD1eBPm3DhoSKPouck" title="计算总结PPT">计算总结PPT</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Study/">#Study</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>ORR计算相关</div>
+      <div>http://example.com/2022/11/11/ORR计算/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Jason</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年11月11日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/11/11/Python%E8%AF%86%E5%88%AB%E5%9C%86%E7%8E%87/" title="Python">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Python</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/11/09/GitHub%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" title="GitHub搭建个人博客">
+                        <span class="hidden-mobile">GitHub搭建个人博客</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
