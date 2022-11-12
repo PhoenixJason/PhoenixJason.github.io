@@ -7,7 +7,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/web.png">
   <link rel="icon" href="/img/web.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -18,14 +18,14 @@
   
     <meta name="description" content="高斯计算分子动力学直径 前期准备 主要参考的是这篇博文 主要参考文献为 J. Phys. Chem. A, 118, 1150 (2014) 基于分子电子密度等值面的估计分子动力学直径的方法，对于文中测试的一系列小分子，计算结果和被普遍采用的Breck书里的那些值有不错的线性相关性。 在Multiwfn中输入以下命令 123456712  &#x2F;&#x2F;定量分子表面分析1   &#x2F;&#x2F;选择表面的定义1   &#x2F;&#x2F;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ORR计算相关">
+<meta property="og:title" content="计算分子动力学直径">
 <meta property="og:url" content="http://example.com/2022/11/11/%E9%AB%98%E6%96%AF%E8%AE%A1%E7%AE%97%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6%E7%9B%B4%E5%BE%84/index.html">
 <meta property="og:site_name" content="PhoenixJason">
 <meta property="og:description" content="高斯计算分子动力学直径 前期准备 主要参考的是这篇博文 主要参考文献为 J. Phys. Chem. A, 118, 1150 (2014) 基于分子电子密度等值面的估计分子动力学直径的方法，对于文中测试的一系列小分子，计算结果和被普遍采用的Breck书里的那些值有不错的线性相关性。 在Multiwfn中输入以下命令 123456712  &#x2F;&#x2F;定量分子表面分析1   &#x2F;&#x2F;选择表面的定义1   &#x2F;&#x2F;">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/img/post1.jpg">
 <meta property="article:published_time" content="2022-11-11T05:33:43.000Z">
-<meta property="article:modified_time" content="2022-11-12T12:58:09.416Z">
+<meta property="article:modified_time" content="2022-11-12T13:19:08.321Z">
 <meta property="article:author" content="Jason">
 <meta property="article:tag" content="Study">
 <meta name="twitter:card" content="summary_large_image">
@@ -33,7 +33,7 @@
   
   
   
-  <title>ORR计算相关 - PhoenixJason</title>
+  <title>计算分子动力学直径 - PhoenixJason</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -200,7 +200,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle">ORR计算相关</span>
+            <span id="subtitle">计算分子动力学直径</span>
           
         </div>
 
@@ -272,7 +272,7 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">ORR计算相关</h1>
+            <h1 style="display: none">计算分子动力学直径</h1>
             
             
               <div class="markdown-body">
@@ -337,7 +337,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs 纯文本">[jason@cabc1 MDD]$ tail MA.log<br><br> ... A MOLECULAR SYSTEM ... (PASSES) ... FROM ONE STATE OF EQUILIBRIUM<br> TO ANOTHER ... BY MEANS OF ALL POSSIBLE INTERMEDIATE PATHS,<br> BUT THE PATH MOST ECONOMICAL OF ENERGY WILL BE THE MORE OFTEN TRAVELED.<br><br>                      -- HENRY EYRING, 1945<br> Job cpu time:       0 days  0 hours  8 minutes 24.3 seconds.<br> Elapsed time:       0 days  0 hours  0 minutes 16.7 seconds.<br> File lengths (MBytes):  RWF=     32 Int=      0 D2E=      0 Chk=      4 Scr=      1<br> Normal termination of Gaussian 16 at Fri Nov 11 20:18:16 2022.<br><br></code></pre></td></tr></table></figure>
 <p>随后用formchk转化chk文件的格式：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs 纯文本">[jason@cabc1 MDD]$ formchk MA.chk<br> Read checkpoint file MA.chk<br> Write formatted file MA.fchk<br> Coordinates translated and rotated.<br> Coordinates match /B/ after translation and rotation.<br> Warning:  fchk array  MicOpt element           1 has value 4622945017495814144 set to -1.<br> Warning:  fchk array  MicOpt element           2 has value 4622945017495814144 set to -1.<br> Warning:  fchk array  MicOpt element           3 has value 4622945017495814144 set to -1.<br> Warning:  fchk array  MicOpt element           4 has value 4622945017495814144 set to -1.<br> Warning:  fchk array  MicOpt element           5 has value 4625193954506324261 set to -1.<br> Warning:  fchk array  MicOpt element           6 has value 4625193954506324261 set to -1.<br> Warning:  fchk array  MicOpt element           7 has value 4625193954506324261 set to -1.<br> Warning:  fchk array  MicOpt element           8 has value 4607217659633734768 set to -1.<br> Warning:  fchk array  MicOpt element           9 has value 4607217659633734768 set to -1.<br> Rotating derivatives, DoTrsp=T IDiff= 2 LEDeriv=   1349 LFDPrp=       0 LDFDPr=       0.<br><br></code></pre></td></tr></table></figure>
-<p>这里的warning就很多，我这次就注意到了这个问题，于是我上网查了一下原因，可以参考的文章有：<a target="_blank" rel="noopener" href="http://bbs.keinsci.com/thread-9632-1-1.html" title="链接1">链接1</a> <a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/HmUST3mqsy659ZPyJoIP6g" title="链接2">链接2</a>，大致上就是g06和g16的formchk文件是不一致的，解决办法也很简单，拿对应版本的formchk文件就行，我老师之前给我的应该是g09版本的formchk文件，后面我又重新找他要了g16版本的formchk文件，然后重新配置一下环境变量，运行起来就正常了，一下是正常输出结果的信息：</p>
+<p>这里的warning就很多，我这次就注意到了这个问题，于是我上网查了一下原因，可以参考的文章有：<a target="_blank" rel="noopener" href="http://bbs.keinsci.com/thread-9632-1-1.html" title="链接1">链接1</a> <a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/HmUST3mqsy659ZPyJoIP6g" title="链接2">链接2</a>，大致上就是g06和g16的formchk文件是不一致的，解决办法也很简单，拿对应版本的formchk文件就行，我老师之前给我的应该是g09版本的formchk文件，后面我又重新找他要了g16版本的formchk文件，然后重新配置一下环境变量，运行起来就正常了，以下是正常输出结果的信息：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs 纯文本">[jason@cabc1 MDD]$ formchk MA.chk<br> Read checkpoint file MA.chk type G16<br> Write formatted file MA.fchk<br> FChkPn:  Coordinates translated and rotated.<br> FChkPn:  Coordinates match /B/ after translation and rotation.<br><br></code></pre></td></tr></table></figure>
 <h3 id="Multiwfn处理">Multiwfn处理</h3>
 <p>这一步的处理与之前类似，很容易就得到了处理好的vtx.pdb文件</p>
@@ -391,7 +391,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>ORR计算相关</div>
+      <div>计算分子动力学直径</div>
       <div>http://example.com/2022/11/11/高斯计算分子动力学直径/</div>
     </div>
     <div class="license-meta">
@@ -436,9 +436,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/11/11/Python%E8%AF%86%E5%88%AB%E5%9C%86%E7%8E%87/" title="Python">
+                      <a href="/2022/11/11/ORR%E8%AE%A1%E7%AE%97/" title="ORR计算相关">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Python</span>
+                        <span class="hidden-mobile">ORR计算相关</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
